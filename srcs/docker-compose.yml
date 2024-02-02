@@ -1,7 +1,19 @@
 services:
   nginx:
+    container_name: nginx
     build: ./requirements/nginx/
     ports:
       - "443:443"
     env_file:
       - .env
+    depends_on:
+      - wordpress
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress/
+    expose:
+      - 9000
+    env_file:
+      - .env
+    volumes:
+      - ./requirements/wordpress/volume:/home/pioupia/wordpress:rw
