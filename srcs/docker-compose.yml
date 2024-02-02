@@ -16,4 +16,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./requirements/wordpress/volume:/home/pioupia/wordpress:rw
+      - wordpress:/home/pioupia/wordpress:rw
+
+volumes:
+  wordpress:
+    name: "wordpress"
