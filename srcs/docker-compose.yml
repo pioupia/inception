@@ -1,0 +1,6 @@
+services:
+  nginx:
+  # sudo docker container run -p 80:80 nginx
+  mariadb:
+
+  wordpress:
