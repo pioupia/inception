@@ -14,8 +14,10 @@ RUN adduser -D -g 'www' www && \
 # Copy the local nginx config to the containered nginx config
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 
-RUN openssl req -x509 -newkey rsa:4096 -days 365 -keyout /etc/nginx/ssl/ca-key.pem \
-	-out /etc/nginx/ssl/ca-cert.pem -subj "/C=FR/ST=Haut-Rhin/L=Mulhouse/O=42/CN=pioupia.42.fr/emailAddress=pioupia@student.42.fr"	\
+RUN echo $SSL_PASSWORD > /etc/nginx/ssl/global.pass
+
+RUN openssl req -x509 -newkey rsa:4096 -days 365 -keyout /etc/nginx/ssl/ca-key.key \
+	-out /etc/nginx/ssl/ca-cert.crt -subj "/C=FR/ST=Haut-Rhin/L=Mulhouse/O=42/OU=school/CN=pioupia.42.fr/emailAddress=pioupia@student.42.fr"	\
 	-passout "pass:$SSL_PASSWORD"
 
 EXPOSE 443
