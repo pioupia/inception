@@ -2,4 +2,6 @@ service mariadb start
 
 mysqladmin -u root shutdown
 
-exec mysqld --user=mysql
+exec mysqld_safe
+
+#docker exec -it <docker ps id> /bin/sh
