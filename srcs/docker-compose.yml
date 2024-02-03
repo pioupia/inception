@@ -17,7 +17,18 @@ services:
       - .env
     volumes:
       - wordpress:/home/pioupia/wordpress:rw
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    expose:
+      - 9000
+    env_file:
+      - .env
+    volumes:
+      - mariadb:/home/pioupia/mariadb:rw
 
 volumes:
   wordpress:
     name: "wordpress"
+  mariadb:
+    name: "mariadb"
