@@ -16,8 +16,8 @@ if [ ! -d /home/pioupia/mariadb/$DB_NAME ]; then
 		GRANT ALL ON \`$DB_NAME\`.* TO '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';\
 		ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ADMIN_PASS';\
 		DROP DATABASE test;\
-		DROP USER 'test'@'localhost';\
-		DELETE FROM mysql.User WHERE User.user = ' ';\
+		DELETE FROM mysql.user WHERE user = ' ';\
+		DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';\
 		FLUSH PRIVILEGES;"
 else
 	echo The database is already configured

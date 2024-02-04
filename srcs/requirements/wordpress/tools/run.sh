@@ -7,7 +7,7 @@ function exit_command_failed {
 }
 
 function wait_for_db {
-	nc mariadb 3306 1>/dev/null
+	mysql -u"$DB_USER" --password="'$DB_PASSWORD'" -e "SHOW ENGINE INNODB STATUS;"
 	status=$?
 	while [ $status -ne 0 ];
 	do
@@ -22,9 +22,8 @@ if [ ! -f wp-config.php ]; then
 	wp config create --dbname=$DB_NAME --dbuser=$DB_USERNAME --dbpass=$DB_PASSWORD --dbhost=mariadb
 	exit_command_failed
 	wp db create
-	exit_command_failed
-	wp core install --url=pioupia.42.fr --title="Inception" --admin_user=$ADMIN_USER --admin_password=$ADMIN_PASS --admin_email=$ADMIN_MAIL
-	exit_command_failed
+	wp core install --url=https://pioupia.42.fr --title="Inception" --admin_user="$ADMIN_USER" --admin_password="$ADMIN_PASS" --admin_email="$ADMIN_MAIL"
+	wp user create "$USER" "$USER_MAIL" --user_pass="$USER_PASS"
 else
 	echo "The WordPress configuration is already set"
 fi

@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - mariadb
+      - wordpress
     networks:
       - inception
     restart: always
@@ -22,7 +22,6 @@ services:
     volumes:
       - wordpress:/home/pioupia/wordpress
     depends_on:
-      - nginx
       - mariadb
     networks:
       - inception
