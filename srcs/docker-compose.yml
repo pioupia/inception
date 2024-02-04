@@ -11,6 +11,7 @@ services:
     networks:
       - inception
     restart: always
+
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress/
@@ -19,13 +20,14 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress:/home/pioupia/wordpress:rw
+      - wordpress:/home/pioupia/wordpress
     depends_on:
       - nginx
       - mariadb
     networks:
       - inception
     restart: always
+
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb/
@@ -33,8 +35,9 @@ services:
       - 3306
     env_file:
       - .env
+      - .db.env
     volumes:
-      - mariadb:/home/pioupia/mariadb:rw
+      - mariadb:/home/pioupia/mariadb
     networks:
       - inception
     restart: always
