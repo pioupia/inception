@@ -1,6 +1,9 @@
+build:
+	docker-compose -f srcs/docker-compose.yml up --build
+
 up:
-	sudo docker-compose -f srcs/docker-compose.yml up --build
+	docker-compose -f srcs/docker-compose.yml up
 
 all: up
 
-.PHONY: all up
+.PHONY: all up build

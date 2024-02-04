@@ -7,7 +7,10 @@ services:
     env_file:
       - .env
     depends_on:
-      - wordpress
+      - mariadb
+    networks:
+      - inception
+    restart: always
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress/
@@ -17,18 +20,32 @@ services:
       - .env
     volumes:
       - wordpress:/home/pioupia/wordpress:rw
+    depends_on:
+      - nginx
+      - mariadb
+    networks:
+      - inception
+    restart: always
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb/
     expose:
-      - 9000
+      - 3306
     env_file:
       - .env
     volumes:
       - mariadb:/home/pioupia/mariadb:rw
+    networks:
+      - inception
+    restart: always
 
 volumes:
   wordpress:
     name: "wordpress"
   mariadb:
     name: "mariadb"
+
+
+networks:
+  inception:
+    driver: bridge

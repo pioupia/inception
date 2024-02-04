@@ -13,6 +13,10 @@ RUN mkdir /run/mysqld && \
 RUN mkdir -p /run/openrc/exclusive && \
 	touch /run/openrc/softlevel
 
-COPY tools/run.sh run.sh
+ADD tools/run.sh run.sh
+
+EXPOSE 3306
 
 ENTRYPOINT [ "/bin/sh", "run.sh" ]
+
+CMD [ "exec", "mysqld_safe", "--bind-address=0.0.0.0" ]
