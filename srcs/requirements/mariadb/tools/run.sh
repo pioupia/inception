@@ -17,13 +17,12 @@ if [ ! -d /home/pioupia/mariadb/$DB_NAME ]; then
 		ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ADMIN_PASS';\
 		DROP DATABASE test;\
 		DELETE FROM mysql.user WHERE user = ' ';\
+		DROP USER IF EXISTS test;\
 		DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';\
 		FLUSH PRIVILEGES;"
 else
 	echo The database is already configured
 fi
-
-# delete toutes les entrees de la db / user test dans mysql.db
 
 mysqladmin -u root -p$DB_ADMIN_PASS shutdown
 

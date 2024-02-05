@@ -10,6 +10,8 @@ services:
       - wordpress
     networks:
       - inception
+    volumes:
+      - wordpress:/home/pioupia/wordpress
     restart: always
 
   wordpress:
@@ -22,7 +24,8 @@ services:
     volumes:
       - wordpress:/home/pioupia/wordpress
     depends_on:
-      - mariadb
+      mariadb:
+          condition: service_healthy
     networks:
       - inception
     restart: always
@@ -40,6 +43,12 @@ services:
     networks:
       - inception
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      timeout: 1s
+      retries: 120
+      start_period: 3s
+
 
 volumes:
   wordpress:
