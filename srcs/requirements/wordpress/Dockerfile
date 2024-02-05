@@ -5,7 +5,7 @@ RUN apk update && \
 	apk add php82 fcgi php82-cgi php82-fpm php82-mysqli php82-phar mysql-client php82-iconv php82-mbstring && \
 	ln -s /usr/bin/php82 /usr/bin/php
 
-WORKDIR /home/pioupia/wordpress
+WORKDIR /usr/share/webapps/
 
 ADD tools/run.sh /usr/local/bin/run.sh
 

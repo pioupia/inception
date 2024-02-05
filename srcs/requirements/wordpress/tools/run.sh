@@ -1,5 +1,3 @@
-cd /home/pioupia/wordpress
-
 function exit_command_failed {
 	if [ $? -ne 0 ]; then
 		exit 1

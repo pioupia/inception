@@ -8,10 +8,12 @@ services:
       - .env
     depends_on:
       - wordpress
+      - adminer
     networks:
       - inception
     volumes:
-      - wordpress:/home/pioupia/wordpress
+      - wordpress_data:/var/wwww/wordpress
+      - adminer_data:/var/wwww/adminer
     restart: always
 
   wordpress:
@@ -22,7 +24,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress:/home/pioupia/wordpress
+      - wordpress_data:/usr/share/webapps/
     depends_on:
       mariadb:
           condition: service_healthy
@@ -39,7 +41,7 @@ services:
       - .env
       - .db.env
     volumes:
-      - mariadb:/home/pioupia/mariadb
+      - mariadb_data:/var/lib/mysql/
     networks:
       - inception
     restart: always
@@ -49,13 +51,48 @@ services:
       retries: 120
       start_period: 3s
 
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer/
+    expose:
+      - 9000
+    networks:
+      - inception
+    volumes:
+      - adminer_data:/var
+    restart: always
+
+  ftp:
+    container_name: ftp
+    build: ./requirements/bonus/ftp/
+    expose:
+      - 22
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/wwww/wordpress
+    restart: always
+
 
 volumes:
-  wordpress:
-    name: "wordpress"
-  mariadb:
-    name: "mariadb"
-
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/wordpress
+      o: bind
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/mariadb
+      o: bind
+  adminer_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/adminer
+      o: bind
 
 networks:
   inception:
