@@ -10,7 +10,7 @@ do
 done
 
 
-if [ ! -d /home/pioupia/data/mariadb/$DB_NAME ]; then
+if [ ! -d /var/lib/mysql/$DB_NAME ]; then
 	mysql -e "CREATE USER IF NOT EXISTS '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';"
 	mysql -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;\
 		GRANT ALL ON \`$DB_NAME\`.* TO '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';\

@@ -12,8 +12,8 @@ services:
     networks:
       - inception
     volumes:
-      - wordpress_data:/var/wwww/wordpress
-      - adminer_data:/var/wwww/adminer
+      - wordpress_data:/var/www/wordpress
+      - adminer_data:/var/www/adminer
     restart: always
 
   wordpress:
@@ -59,7 +59,7 @@ services:
     networks:
       - inception
     volumes:
-      - adminer_data:/var
+      - adminer_data:/var/www/adminer/
     restart: always
 
   ftp:
@@ -70,7 +70,7 @@ services:
     networks:
       - inception
     volumes:
-      - wordpress_data:/var/wwww/wordpress
+      - wordpress_data:/var/www/wordpress
     restart: always
 
 

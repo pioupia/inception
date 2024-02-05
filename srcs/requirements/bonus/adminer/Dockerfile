@@ -4,7 +4,7 @@ RUN apk update && \
 	apk add php82 php82-fpm php82-session && \
 	ln -s /usr/bin/php82 /usr/bin/php
 
-WORKDIR /var/wwww/adminer/
+WORKDIR /var/www/adminer/
 
 RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php && \
 	mv adminer-4.8.1.php adminer.php && \
