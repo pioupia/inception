@@ -64,9 +64,14 @@ services:
 
   ftp:
     container_name: ftp
-    build: ./requirements/bonus/ftp/
-    expose:
-      - 22
+    build:
+      context: ./requirements/bonus/ftp/
+      args:
+        - DB_FTP_NAME=${DB_FTP_NAME}
+        - DB_FTP_USERNAME=${DB_FTP_USERNAME}
+        - DB_FTP_PASSWORD=${DB_FTP_PASSWORD}
+    ports:
+      - "21:21"
     networks:
       - inception
     volumes:

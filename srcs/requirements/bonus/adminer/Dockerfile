@@ -1,7 +1,7 @@
 FROM alpine:3.18
 
 RUN apk update && \
-	apk add php82 php82-fpm php82-session && \
+	apk add php82 php82-fpm php82-session php82-mysqli && \
 	ln -s /usr/bin/php82 /usr/bin/php
 
 WORKDIR /var/www/adminer/
