@@ -62,16 +62,16 @@ services:
       - adminer_data:/var/www/adminer/
     restart: always
 
-  # ftp:
-  #   container_name: ftp
-  #   build: ./requirements/bonus/ftp/
-  #   expose:
-  #     - 22
-  #   networks:
-  #     - inception
-  #   volumes:
-  #     - wordpress_data:/var/www/wordpress
-  #   restart: always
+  ftp:
+    container_name: ftp
+    build: ./requirements/bonus/ftp/
+    expose:
+      - 22
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    restart: always
 
 volumes:
   wordpress_data:
