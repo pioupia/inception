@@ -5,6 +5,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG DB_FTP_USERNAME
 ARG DB_FTP_PASSWORD
 ARG DB_FTP_NAME
+ARG FTP_PASSWORD
+ARG FTP_USERNAME
 
 RUN apt-get update && \
 	apt-get install pure-ftpd-mysql mariadb-client netcat-traditional vim -y
@@ -22,6 +24,7 @@ RUN echo "yes" > /etc/pure-ftpd/conf/ChrootEveryone && \
 	echo "yes" > /etc/pure-ftpd/conf/CreateHomeDir && \
 	echo "yes" > /etc/pure-ftpd/conf/NoAnonymous && \
 	echo "yes" > /etc/pure-ftpd/conf/IPV4Only && \
+	echo "2000 2050" > /etc/pure-ftpd/conf/PassivePortRange && \
 	mkdir -p /tmp/pure-ftpd-install
 
 ADD conf/pure-ftpd-common.deb /tmp/pure-ftpd-install
@@ -38,7 +41,12 @@ RUN echo "deb-src http://deb.debian.org/debian bullseye main" >> /etc/apt/source
 	rm -rf /tmp/pure-ftpd-install && \
 	/etc/init.d/pure-ftpd-mysql restart
 
+RUN echo $FTP_PASSWORD >> password && \
+	echo $FTP_PASSWORD >> password && \
+	pure-pw useradd $FTP_USERNAME -u ftpuser -g ftpgroup -d /var/www/wordpress/wp-content < password && \
+	rm password && \
+	pure-pw mkdb
+
 EXPOSE 21
 
-# -d for debug
-CMD [ "/usr/sbin/pure-ftpd-mysql", "-l", "mysql:/etc/pure-ftpd/db/mysql.conf", "-l", "pam", "-E", "-J", "HIGH", "-O", "clf:/var/log/pure-ftpd/transfer.log", "-u", "1000", "-A", "-j", "-4" ]
+CMD [ "/usr/sbin/pure-ftpd-mysql", "-l", "mysql:/etc/pure-ftpd/db/mysql.conf", "-l", "pam", "-E", "-J", "HIGH", "-O", "clf:/var/log/pure-ftpd/transfer.log", "-u", "1000", "-A", "-j", "-4", "-p", "2000:2050" ]

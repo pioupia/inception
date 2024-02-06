@@ -70,12 +70,19 @@ services:
         - DB_FTP_NAME=${DB_FTP_NAME}
         - DB_FTP_USERNAME=${DB_FTP_USERNAME}
         - DB_FTP_PASSWORD=${DB_FTP_PASSWORD}
+        - FTP_USERNAME=${FTP_USER}
+        - FTP_PASSWORD=${FTP_PASSWORD}
     ports:
       - "21:21"
+      - "20:20"
+      - "2000-2050:2000-2050"
     networks:
       - inception
     volumes:
       - wordpress_data:/var/www/wordpress
+    depends_on:
+      mariadb:
+          condition: service_healthy
     restart: always
 
 volumes:
