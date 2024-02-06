@@ -24,7 +24,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_data:/usr/share/webapps/
+      - wordpress_data:/var/www/wordpress/
     depends_on:
       mariadb:
           condition: service_healthy
@@ -48,8 +48,8 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
       timeout: 1s
+      interval: 5s
       retries: 120
-      start_period: 3s
 
   adminer:
     container_name: adminer
@@ -62,17 +62,16 @@ services:
       - adminer_data:/var/www/adminer/
     restart: always
 
-  ftp:
-    container_name: ftp
-    build: ./requirements/bonus/ftp/
-    expose:
-      - 22
-    networks:
-      - inception
-    volumes:
-      - wordpress_data:/var/www/wordpress
-    restart: always
-
+  # ftp:
+  #   container_name: ftp
+  #   build: ./requirements/bonus/ftp/
+  #   expose:
+  #     - 22
+  #   networks:
+  #     - inception
+  #   volumes:
+  #     - wordpress_data:/var/www/wordpress
+  #   restart: always
 
 volumes:
   wordpress_data:

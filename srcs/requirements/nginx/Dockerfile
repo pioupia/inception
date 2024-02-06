@@ -9,7 +9,6 @@ RUN adduser -D -g 'www' www && \
 	mkdir -p /var/www/html && \
 	mkdir -p /etc/nginx/ssl/ && \
 	chown -R www:www /var/lib/nginx && \
-	chown -R www:www /var/www && \
 	mkdir -p /etc/nginx/sites-enabled/
 
 # Copy the local nginx config to the containered nginx config
