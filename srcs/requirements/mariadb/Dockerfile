@@ -5,7 +5,7 @@ RUN apk update && \
 	apk add mariadb mysql-client openrc udev-init-scripts-openrc
 
 RUN mysql_install_db --user=mysql \
-    --datadir=/home/pioupia/mariadb
+    --datadir=/var/lib/mysql/
 
 RUN mkdir /run/mysqld && \
 	chown -R mysql:mysql /run/mysqld

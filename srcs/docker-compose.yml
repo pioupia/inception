@@ -8,8 +8,12 @@ services:
       - .env
     depends_on:
       - wordpress
+      - adminer
     networks:
       - inception
+    volumes:
+      - wordpress_data:/var/www/wordpress
+      - adminer_data:/var/www/adminer
     restart: always
 
   wordpress:
@@ -20,9 +24,10 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress:/home/pioupia/wordpress
+      - wordpress_data:/var/www/wordpress/
     depends_on:
-      - mariadb
+      mariadb:
+          condition: service_healthy
     networks:
       - inception
     restart: always
@@ -36,17 +41,93 @@ services:
       - .env
       - .db.env
     volumes:
-      - mariadb:/home/pioupia/mariadb
+      - mariadb_data:/var/lib/mysql/
     networks:
       - inception
     restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      timeout: 1s
+      interval: 5s
+      retries: 120
+
+  adminer:
+    container_name: adminer
+    build: ./requirements/bonus/adminer/
+    expose:
+      - 9000
+    networks:
+      - inception
+    volumes:
+      - adminer_data:/var/www/adminer/
+    restart: always
+
+  ftp:
+    container_name: ftp
+    build:
+      context: ./requirements/bonus/ftp/
+      args:
+        - DB_FTP_NAME=${DB_FTP_NAME}
+        - DB_FTP_USERNAME=${DB_FTP_USERNAME}
+        - DB_FTP_PASSWORD=${DB_FTP_PASSWORD}
+        - FTP_USERNAME=${FTP_USER}
+        - FTP_PASSWORD=${FTP_PASSWORD}
+    ports:
+      - "21:21"
+      - "20:20"
+      - "2000-2050:2000-2050"
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    depends_on:
+      mariadb:
+          condition: service_healthy
+    restart: always
+  
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis/
+    expose:
+      - 6379
+    env_file:
+      - .redis.env
+    volumes:
+      - redis_data:/var/lib/redis
+    networks:
+      - inception
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      timeout: 1s
+      interval: 5s
+      retries: 120
 
 volumes:
-  wordpress:
-    name: "wordpress"
-  mariadb:
-    name: "mariadb"
-
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/wordpress
+      o: bind
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/mariadb
+      o: bind
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/redis
+      o: bind
+  adminer_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/adminer
+      o: bind
 
 networks:
   inception:

@@ -10,20 +10,28 @@ do
 done
 
 
-if [ ! -d /home/pioupia/mariadb/$DB_NAME ]; then
+if [ ! -d /var/lib/mysql/$DB_NAME ]; then
 	mysql -e "CREATE USER IF NOT EXISTS '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';"
 	mysql -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;\
 		GRANT ALL ON \`$DB_NAME\`.* TO '$DB_USERNAME'@'%' IDENTIFIED BY '$DB_PASSWORD';\
 		ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ADMIN_PASS';\
 		DROP DATABASE test;\
 		DELETE FROM mysql.user WHERE user = ' ';\
+		DROP USER IF EXISTS test;\
 		DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';\
+		FLUSH PRIVILEGES;"
+	
+	# bonus
+	mysql -u root -p$DB_ADMIN_PASS -e "CREATE USER IF NOT EXISTS '$DB_FTP_USERNAME'@'%' IDENTIFIED BY '$DB_FTP_PASSWORD';"
+	mysql -u root -p$DB_ADMIN_PASS -e "CREATE DATABASE IF NOT EXISTS \`$DB_FTP_NAME\` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;\
+		GRANT ALL ON \`$DB_FTP_NAME\`.* TO '$DB_FTP_USERNAME'@'%' IDENTIFIED BY '$DB_FTP_PASSWORD';\
+		USE $DB_FTP_NAME;
+		CREATE TABLE users ( user varchar(30) NOT NULL, password varchar(64) NOT NULL, home varchar(128) NOT NULL, bandwidth_limit_upload smallint(5) NOT NULL default 0, bandwidth_limit_download smallint(5) NOT NULL default 0, ip_allow varchar(15) NOT NULL default 'any', quota smallint(5) NOT NULL default '0', quota_files int(11) NOT NULL default 0, active enum('yes','no') NOT NULL default 'yes', PRIMARY KEY (user), UNIQUE KEY User (user) );
+		INSERT INTO users (user, password, home) VALUES ('$FTP_USER', sha1('$FTP_PASSWORD'), '/var/www/wordpress/wp-content');
 		FLUSH PRIVILEGES;"
 else
 	echo The database is already configured
 fi
-
-# delete toutes les entrees de la db / user test dans mysql.db
 
 mysqladmin -u root -p$DB_ADMIN_PASS shutdown
 
