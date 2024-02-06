@@ -9,7 +9,7 @@ ARG FTP_PASSWORD
 ARG FTP_USERNAME
 
 RUN apt-get update && \
-	apt-get install pure-ftpd-mysql mariadb-client netcat-traditional vim -y
+	apt-get install pure-ftpd-mysql mariadb-client -y
 
 RUN groupadd -g 2001 ftpgroup && \
 	useradd -u 2001 -s /bin/false -d /bin/null -c "pureftpd user" -g ftpgroup ftpuser
@@ -22,9 +22,6 @@ MYSQLDatabase\t\t$DB_FTP_NAME\n" /etc/pure-ftpd/db/mysql.conf
 
 RUN echo "yes" > /etc/pure-ftpd/conf/ChrootEveryone && \
 	echo "yes" > /etc/pure-ftpd/conf/CreateHomeDir && \
-	echo "yes" > /etc/pure-ftpd/conf/NoAnonymous && \
-	echo "yes" > /etc/pure-ftpd/conf/IPV4Only && \
-	echo "2000 2050" > /etc/pure-ftpd/conf/PassivePortRange && \
 	mkdir -p /tmp/pure-ftpd-install
 
 ADD conf/pure-ftpd-common.deb /tmp/pure-ftpd-install

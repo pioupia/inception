@@ -84,6 +84,24 @@ services:
       mariadb:
           condition: service_healthy
     restart: always
+  
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis/
+    expose:
+      - 6379
+    env_file:
+      - .redis.env
+    volumes:
+      - redis_data:/var/lib/redis
+    networks:
+      - inception
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      timeout: 1s
+      interval: 5s
+      retries: 120
 
 volumes:
   wordpress_data:
@@ -97,6 +115,12 @@ volumes:
     driver_opts:
       type: none
       device: /home/pioupia/data/mariadb
+      o: bind
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/redis
       o: bind
   adminer_data:
     driver: local
