@@ -43,6 +43,7 @@ services:
     env_file:
       - .env
       - .db.env
+      - .roundcube.env
     volumes:
       - mariadb_data:/var/lib/mysql/
     networks:
@@ -105,6 +106,22 @@ services:
       timeout: 1s
       interval: 5s
       retries: 120
+
+  postfix:
+    container_name: postfix
+    build: ./requirements/bonus/postfix/
+    expose:
+      - 25
+      - 465
+      - 587
+    env_file:
+      - .roundcube.env
+    depends_on:
+      mariadb:
+          condition: service_healthy
+    networks:
+      - inception
+    restart: always
 
 volumes:
   wordpress_data:

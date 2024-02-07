@@ -35,6 +35,7 @@ if [ ! -d /var/lib/mysql/$DB_NAME ]; then
 	mysql -u root -p$DB_ADMIN_PASS -e "CREATE DATABASE IF NOT EXISTS \`$DB_ROUNDCUBE_NAME\` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;\
 		GRANT ALL ON \`$DB_ROUNDCUBE_NAME\`.* TO '$DB_ROUNDCUBE_USERNAME'@'%' IDENTIFIED BY '$DB_ROUNDCUBE_PASSWORD';\
 		FLUSH PRIVILEGES;"
+	mysql -u root -p$DB_ADMIN_PASS $DB_ROUNDCUBE_NAME < /var/lib/mysql.initial.sql
 else
 	echo The database is already configured
 fi
