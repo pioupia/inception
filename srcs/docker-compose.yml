@@ -23,6 +23,7 @@ services:
       - 9000
     env_file:
       - .env
+      - .redis.env
     volumes:
       - wordpress_data:/var/www/wordpress/
     depends_on:
@@ -98,7 +99,7 @@ services:
       - inception
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
       timeout: 1s
       interval: 5s
       retries: 120
