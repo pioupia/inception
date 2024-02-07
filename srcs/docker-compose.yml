@@ -52,6 +52,7 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
       timeout: 1s
+      start_period: 5s
       interval: 5s
       retries: 120
 
@@ -107,18 +108,15 @@ services:
       interval: 5s
       retries: 120
 
-  postfix:
-    container_name: postfix
-    build: ./requirements/bonus/postfix/
+  kuma:
+    container_name: kuma
+    build: ./requirements/bonus/kuma/
     expose:
-      - 25
-      - 465
-      - 587
-    env_file:
-      - .roundcube.env
+      - 3001
+    volumes:
+      - kuma_data:/var/www/kuma
     depends_on:
-      mariadb:
-          condition: service_healthy
+      - nginx
     networks:
       - inception
     restart: always
@@ -147,6 +145,12 @@ volumes:
     driver_opts:
       type: none
       device: /home/pioupia/data/adminer
+      o: bind
+  kuma_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/kuma
       o: bind
 
 networks:

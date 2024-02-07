@@ -15,6 +15,7 @@ RUN adduser -D -g 'www' www && \
 ADD conf/nginx.conf /etc/nginx/nginx.conf
 ADD conf/adminer.conf /etc/nginx/sites-enabled/adminer.conf
 ADD conf/wordpress.conf /etc/nginx/sites-enabled/wordpress.conf
+ADD conf/kuma.conf /etc/nginx/sites-enabled/kuma.conf
 
 RUN echo $SSL_PASSWORD > /etc/nginx/ssl/global.pass
 

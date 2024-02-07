@@ -18,7 +18,7 @@ fclean: clean
 re: fclean build
 
 build:
-	$(COMPOSE) up --build
+	$(COMPOSE) build
 
 down:
 	$(COMPOSE) down
