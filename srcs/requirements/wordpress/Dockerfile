@@ -2,7 +2,7 @@ FROM alpine:3.18
 
 # Update the system and install php
 RUN apk update && \
-	apk add php82 fcgi php82-cgi php82-fpm php82-mysqli php82-phar mysql-client php82-iconv php82-mbstring php82-tokenizer php82-redis php8-ctype && \
+	apk add php82 fcgi php82-cgi php82-fpm php82-mysqli php82-phar mysql-client php82-iconv php82-mbstring php82-tokenizer php82-redis php82-ctype && \
 	ln -s /usr/bin/php82 /usr/bin/php
 
 WORKDIR /var/www/wordpress/
