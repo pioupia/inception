@@ -121,6 +121,19 @@ services:
       - inception
     restart: always
 
+  transcendence:
+    container_name: transcendence
+    build: ./requirements/bonus/transcendence/
+    expose:
+      - 8000
+    volumes:
+      - transcendence_data:/var/www/
+    depends_on:
+      - nginx
+    networks:
+      - inception
+    restart: always
+
 volumes:
   wordpress_data:
     driver: local
@@ -151,6 +164,12 @@ volumes:
     driver_opts:
       type: none
       device: /home/pioupia/data/kuma
+      o: bind
+  transcendence_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/pioupia/data/transcendence
       o: bind
 
 networks:
